@@ -37,20 +37,7 @@ jobs:
       run: |
         pip install buildozer cython
 
-    - name: Download Android SDK and accept licenses
-      run: |
-        # Tạo thư mục Android SDK
-        mkdir -p ~/.android
-        touch ~/.android/repositories.cfg
-        
-        # Khởi tạo buildozer (bỏ qua nếu spec đã tồn tại)
-        buildozer init 2>/dev/null || true
-        
-        # Chấp nhận licenses và download build-tools
-        yes | ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
-        ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager "build-tools;30.0.3" "platforms;android-33"
-
-    - name: Build APK
+    - name: Build APK (Let Buildozer handle everything)
       run: |
         buildozer -v android debug
 
