@@ -3,7 +3,7 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 120
+    timeout-minutes: 180
     
     steps:
     - name: Checkout code
@@ -23,23 +23,30 @@ jobs:
           zip \
           unzip \
           openjdk-11-jdk \
-          python3-dev \
+          python3-pip \
           autoconf \
           libtool \
           pkg-config \
           zlib1g-dev \
           libncurses5-dev \
-          libncursesw5-dev \
           cmake \
           libffi-dev \
-          libssl-dev \
-          libltdl-dev
+          libssl-dev
 
     - name: Install Buildozer
       run: |
         pip install buildozer cython
 
-    - name: Build APK with Buildozer
+    - name: Initialize Buildozer and download Android SDK
+      run: |
+        buildozer init
+        # Tạo thư mục và chấp nhận licenses
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        yes | ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
+        ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager "build-tools;30.0.3" "platforms;android-33"
+
+    - name: Build APK
       run: |
         buildozer -v android debug
 
