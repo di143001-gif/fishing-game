@@ -2,7 +2,7 @@ name: Build Android APK
 on: [push, workflow_dispatch]
 jobs:
   build:
-    runs-on: ubuntu-22.04  # ĐỔI từ ubuntu-latest thành ubuntu-22.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 120
     
     steps:
@@ -35,10 +35,9 @@ jobs:
           libssl-dev \
           libltdl-dev
 
-    - name: Install Buildozer and dependencies
+    - name: Install Buildozer
       run: |
         pip install buildozer cython
-        buildozer android clean
 
     - name: Build APK with Buildozer
       run: |
