@@ -3,26 +3,15 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-
-    - name: Setup Python
-      uses: actions/setup-python@v4
+    - uses: actions/checkout@v4
+    
+    - name: Build APK with Kivy Action
+      uses: kivy/buildozer-action@master
       with:
-        python-version: '3.9'
-
-    - name: Install Buildozer
-      run: pip install buildozer
-
-    - name: Build APK
-      run: |
-        buildozer -v android debug
+        workdir: .
+        buildozer_cmd: android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
